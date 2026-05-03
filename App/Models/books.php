@@ -4,7 +4,7 @@ namespace App\Models;
 use Framework\Core\Model;
 
 
-class Knihy extends Model{
+class books extends Model{
     protected ?string $menoAutora = null;
     protected ?string $nazovKnizky = null;
     protected ?int $idKnizky = null;

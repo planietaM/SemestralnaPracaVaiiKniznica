@@ -5,11 +5,22 @@ use Framework\Core\Identity;
 use Framework\Core\Model;
 
 
-class Uzivatelia extends Model implements Identity{
+class users extends Model implements Identity{
     protected ?string $rolaPouzivatela = null;
     protected ?string $meno = null;
     protected ?int $id = null;
     protected ?string $heslo = null;
+    protected ?string $email = null;
+
+    public function getEmail(): ?int
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
 
     public function getId(): ?int
     {

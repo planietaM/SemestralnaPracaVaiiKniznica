@@ -5,7 +5,7 @@
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="sk"data-bs-theme="light">
 <head>
     <title><?= App\Configuration::APP_NAME ?></title>
     <!-- Favicons -->
@@ -31,7 +31,7 @@
                 <a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('home.PokrocileVyhladavanie') ?>">PokrocileVyhladavanie</a>
+                <a class="nav-link" href="<?= $link->url('knihy.celkovyPocet') ?>">PokrocileVyhladavanie</a>
             </li>
         </ul>
 

@@ -6,7 +6,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="sk"data-bs-theme="light">
 <head>
     <title><?= App\Configuration::APP_NAME ?></title>
     <!-- Favicons -->

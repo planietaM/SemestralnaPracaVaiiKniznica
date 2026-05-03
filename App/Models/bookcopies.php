@@ -6,7 +6,7 @@ namespace App\Models;
 use Framework\Core\Model;
 
 
-class KopieKnizky extends Model
+class bookcopies extends Model
 {
     protected ?int $dostupna = null;
     protected ?int $idDanejKnihy = null;

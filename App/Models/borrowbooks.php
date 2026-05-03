@@ -4,15 +4,15 @@ namespace App\Models;
 use Framework\Core\Model;
 
 
-class VypozicaneKnihy extends Model{
+class borrowbooks extends Model{
     protected ?int $idPozicania = null;
     protected ?int $idUzivatela = null;
     protected ?int $idKnizky = null;
-
+    protected ?int $idOriginaluKnizky = null;
     protected ?\DateTime $datumPozicania = null;
     protected ?\DateTime $datumVratenia = null;
 
-    protected ?string $statusKnizky = null; // 'aktivna', 'vratena', 'po_termine'
+    protected ?int $dostupna = null;
 
 
     public function getIdPozicania(): ?int
@@ -39,9 +39,9 @@ class VypozicaneKnihy extends Model{
     {
         return $this->datumVratenia?->format($format);
     }
-    public function getStatusKnizky(): ?string
+    public function getDostupna(): ?string
     {
-        return $this->statusKnizky;
+        return $this->dostupna;
     }
 
 
@@ -70,9 +70,9 @@ class VypozicaneKnihy extends Model{
         $this->datumVratenia = $datum ? new \DateTime($datum) : null;
     }
 
-    public function setStatusKnizky(?string $statusKnizky): void
+    public function setDostupna(?string $dostupna): void
     {
-        $this->statusKnizky = $statusKnizky;
+        $this->dostupna = $dostupna;
     }
 
 

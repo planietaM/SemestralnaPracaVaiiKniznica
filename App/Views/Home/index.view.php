@@ -28,7 +28,7 @@
         <div class="col text-center">
             <h4>Authors</h4>
             <div>
-                <a href="mailto:Patrik.Hrkut@fri.uniza.sk">doc. Ing. Patrik Hrkút, PhD.</a><br>
+                <a href="th">doc. Ing. Patrik Hrkút, PhD.</a><br>
                 <a href="mailto:Michal.Duracik@fri.uniza.sk">Ing. Michal Ďuračík, PhD.</a><br>
                 <a href="mailto:Matej.Mesko@fri.uniza.sk">Ing. Matej Meško, PhD.</a><br><br>
                 &copy; 2020-<?= date('Y') ?> University of Žilina, Faculty of Management Science and Informatics,
@@ -36,4 +36,6 @@
             </div>
         </div>
     </div>
+
+
 </div>
