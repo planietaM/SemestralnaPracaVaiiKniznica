@@ -57,6 +57,90 @@ class AuthController extends BaseController
         return $this->html(compact("message"));
     }
 
+    public function register(Request $request): Response
+    {
+        $message = null;
+
+        if ($request->isPost()) {
+
+            $meno = $request->post('meno') ?? '';
+            $email = $request->post('email') ?? '';
+            $heslo = $request->post('heslo') ?? '';
+            $hesloOverenie = $request->post('hesloOverenie') ?? '';
+
+            $vsetciPouzivatelia = \App\Models\users::getAll();
+            $emailUzExistuje = false;
+            $menoUzExistuje = false;
+            $jeProblemPriDatach = false;
+
+            if (empty($meno) || empty($email) || empty($heslo)) {
+                $message = "Všetky polia sú povinné!";
+                $jeProblemPriDatach = true;
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = "Neplatný formát e-mailu!";
+                $jeProblemPriDatach = true;
+            }
+            foreach ($vsetciPouzivatelia as $existujuciUser) {
+
+                if ($existujuciUser->getEmail() === $email) {
+                    $emailUzExistuje = true;
+                    break;
+                }
+                if ($existujuciUser->getMeno() === $meno) {
+                    $menoUzExistuje = true;
+                    break;
+                }
+
+            }
+
+            if (strlen($heslo) < 6) {
+                $message = "Heslo musí mať aspoň 6 znakov!";
+                $jeProblemPriDatach = true;
+            } elseif ($heslo !== $hesloOverenie) {
+                $message = "Heslá sa nezhodujú!";
+                $jeProblemPriDatach = true;
+            } elseif ($emailUzExistuje) {
+                $message = "Tento e-mail je už zaregistrovany!";
+                $jeProblemPriDatach = true;
+            } elseif ($menoUzExistuje) {
+                $message = "Toto meno je už zaregistrovane!";
+                $jeProblemPriDatach = true;
+            }
+
+
+
+            if($jeProblemPriDatach == false) {
+                // 3. SEM IDE LOGIKA UKLADANIA (iba ak prebehla validácia OK)
+                try {
+                    // Musí sa volať presne ako class v modeli: users
+                    $user = new \App\Models\users();
+
+                    // Používame SETTERY, pretože vlastnosti sú protected
+                    $user->setMeno($meno);
+                    $user->setEmail($email);
+                    $user->setHeslo(password_hash($heslo, PASSWORD_DEFAULT));
+
+                    $user->setRolaPouzivatela('user');
+
+                    // Uloženie do DB
+                    $user->save();
+
+                    // Presmerovanie po úspechu
+                    return $this->redirect($this->url("auth.login"));
+
+                } catch (\Exception $e) {
+                    // Ak napr. email už existuje a DB vyhodí chybu
+                    $message = "Chyba pri registrácii: " . $e->getMessage();
+                }
+            }
+        }
+
+
+        return $this->html([
+            'message' => $message
+        ], 'register');
+    }
+
     /**
      * Logs out the current user.
      *

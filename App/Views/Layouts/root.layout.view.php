@@ -31,7 +31,7 @@
                 <a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('knihy.celkovyPocet') ?>">PokrocileVyhladavanie</a>
+                <a class="nav-link" href="<?= $link->url('knihy.celkovyPocet') ?>">Pokrocile Vyhladavanie</a>
             </li>
         </ul>
 
@@ -41,11 +41,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $link->url('auth.logout') ?>">Log out</a>
                 </li>
+
             </ul>
         <?php } else { ?>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
+                    <a class="nav-link" href="<?= App\Configuration::LOGIN_URL ?>">PrihlasSa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $link->url('auth.register') ?>">ZaregistrujSa</a>
                 </li>
             </ul>
         <?php } ?>

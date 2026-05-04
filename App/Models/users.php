@@ -1,18 +1,18 @@
 <?php
 
 namespace App\Models;
-use Framework\Core\Identity;
+
+use Framework\Core\IIdentity;
 use Framework\Core\Model;
 
-
-class users extends Model implements Identity{
+class users extends Model implements IIdentity {
     protected ?string $rolaPouzivatela = null;
     protected ?string $meno = null;
     protected ?int $id = null;
     protected ?string $heslo = null;
     protected ?string $email = null;
 
-    public function getEmail(): ?int
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -33,6 +33,10 @@ class users extends Model implements Identity{
     }
 
     public function getMeno(): ?string
+    {
+        return $this->meno;
+    }
+    public function getName(): string
     {
         return $this->meno;
     }
@@ -57,7 +61,7 @@ class users extends Model implements Identity{
         $this->heslo = $heslo;
     }
 
-    public function setId(?string $id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
