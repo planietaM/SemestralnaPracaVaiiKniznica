@@ -32,6 +32,11 @@ class users extends Model implements IIdentity {
         return $this->rolaPouzivatela;
     }
 
+    public function getRola(): ?string
+    {
+        return $this->rolaPouzivatela;
+    }
+
     public function getMeno(): ?string
     {
         return $this->meno;
