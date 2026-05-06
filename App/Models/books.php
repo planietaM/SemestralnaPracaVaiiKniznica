@@ -3,17 +3,15 @@
 namespace App\Models;
 use Framework\Core\Model;
 
-
 class books extends Model{
     protected ?string $menoAutora = null;
     protected ?string $nazovKnizky = null;
-    protected ?int $idKnizky = null;
+    protected ?int $id = null;
     protected ?string $fotkaKnizky = null;
-
 
     public function getId(): ?int
     {
-        return $this->idKnizky;
+        return $this->id;
     }
 
     public function getMenoAutora(): ?string
@@ -46,8 +44,8 @@ class books extends Model{
         $this->fotkaKnizky = $fotkaKnizky;
     }
 
-    public function setIdKnizky(?string $idKnizky): void
+    public function setIdKnizky(?int $idKnizky): void
     {
-        $this->idKnizky = $idKnizky;
+        $this->id = $idKnizky;
     }
 }

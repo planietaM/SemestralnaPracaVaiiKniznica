@@ -1,17 +1,14 @@
 <?php
 
-
 namespace App\Models;
 
 use Framework\Core\Model;
 
-
 class bookcopies extends Model
 {
     protected ?int $dostupna = null;
-    protected ?int $idDanejKnihy = null;
+    protected ?int $id = null;
     protected ?int $idOriginalKopie = null;
-
 
     public function getDostupna(): ?int
     {
@@ -20,7 +17,12 @@ class bookcopies extends Model
 
     public function getIdDanejKnihy(): ?int
     {
-        return $this->idDanejKnihy;
+        return $this->id;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getIdOriginalKopie(): ?int
@@ -35,7 +37,7 @@ class bookcopies extends Model
 
     public function setIdDanejKnihy(?int $idDanejKnihy): void
     {
-        $this->idDanejKnihy = $idDanejKnihy;
+        $this->id = $idDanejKnihy;
     }
 
     public function setIdOriginalKopie(?int $idOriginalKopie): void

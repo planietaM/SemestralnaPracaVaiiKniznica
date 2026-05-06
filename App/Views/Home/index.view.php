@@ -4,6 +4,8 @@
 ?>
 
 <div class="container-fluid">
+
+
     <div class="row">
         <div class="col mt-5">
             <div class="text-center">
@@ -23,6 +25,9 @@
                 </p>
             </div>
         </div>
+    </div>
+    <div class="mb-10">
+        <input type="text" id="tableSearch" class="form-control w-100" placeholder="🔍 Rýchle hľadanie kategórie...">
     </div>
     <div class="row mt-3">
         <div class="col text-center">

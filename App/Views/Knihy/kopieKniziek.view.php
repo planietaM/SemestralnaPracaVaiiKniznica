@@ -1,0 +1,48 @@
+<?php
+/** @var array $kopieKniziek */
+/** @var \Framework\Support\LinkGenerator $link */
+?>
+
+
+<div class="container-fluid">
+
+
+
+
+    <div class="row ">
+        <div class="col ">
+            <div class="text-center">
+                <h2>Vsetky knizky</h2>
+            </div>
+        </div >
+
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover" border="2">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>IDOriginalu</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($kopieKniziek  as $kniha): ?>
+                <tr>
+                    <td><?= htmlspecialchars((string)$kniha->getId()) ?></td>
+                    <td><?= htmlspecialchars((string)$kniha->getIdOriginalKopie()) ?></td>
+                </tr>
+            <?php endforeach ?>
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/js/script.js"></script>
+
+
+
+
+</div>

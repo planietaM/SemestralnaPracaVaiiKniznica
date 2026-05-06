@@ -3,21 +3,23 @@
 namespace App\Models;
 use Framework\Core\Model;
 
-
 class borrowbooks extends Model{
-    protected ?int $idPozicania = null;
+    protected ?int $id = null;
     protected ?int $idUzivatela = null;
     protected ?int $idKnizky = null;
     protected ?int $idOriginaluKnizky = null;
     protected ?\DateTime $datumPozicania = null;
     protected ?\DateTime $datumVratenia = null;
-
     protected ?int $dostupna = null;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getIdPozicania(): ?int
     {
-        return $this->idPozicania;
+        return $this->id;
     }
 
     public function getIdUzivatela(): ?int
@@ -39,15 +41,15 @@ class borrowbooks extends Model{
     {
         return $this->datumVratenia?->format($format);
     }
-    public function getDostupna(): ?string
+
+    public function getDostupna(): ?int
     {
         return $this->dostupna;
     }
 
-
     public function setIdPozicania(?int $idPozicania): void
     {
-        $this->idPozicania = $idPozicania;
+        $this->id = $idPozicania;
     }
 
     public function setIdUzivatela(?int $idUzivatela): void
@@ -70,10 +72,8 @@ class borrowbooks extends Model{
         $this->datumVratenia = $datum ? new \DateTime($datum) : null;
     }
 
-    public function setDostupna(?string $dostupna): void
+    public function setDostupna(?int $dostupna): void
     {
         $this->dostupna = $dostupna;
     }
-
-
 }

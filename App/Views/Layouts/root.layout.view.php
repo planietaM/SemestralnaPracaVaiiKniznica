@@ -31,8 +31,21 @@
                 <a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('knihy.celkovyPocet') ?>">Pokrocile Vyhladavanie</a>
+                <a class="nav-link" href="<?= $link->url('knihy.celkovyPocet') ?>">skusame</a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= $link->url('knihy.index') ?>">Pokrocile Vyhladavanie</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= $link->url('knihy.pridajKnihu') ?>">PridajKnihu</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= $link->url('knihy.kopieKniziek') ?>">PridajKnihu</a>
+            </li>
+
         </ul>
 
         <?php if ($user->isLoggedIn()) { ?>
