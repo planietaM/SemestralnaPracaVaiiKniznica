@@ -7,20 +7,15 @@ use Framework\Core\IIdentity;
 
 class SimpleAuthenticator extends SessionAuthenticator {
 
-    public function login($username, $password): bool
+    /*public function login($username, $password): bool
     {
-
-
-        foreach (users::getAll() as $user) {
-            if ($user->getMeno() === $username || $user->getEmail() === $username) {
-                if (password_verify($password, $user->getHeslo())) {
-                    $_SESSION['user'] = $username;
-                    return true;
-                }
-            }
+        $user = $this->authenticate($username, $password);
+        if ($user !== null) {
+            $_SESSION['user'] = $username;
+            return true;
         }
         return false;
-    }
+    }*/
 
 
     protected function authenticate(string $username, string $password): ?IIdentity
