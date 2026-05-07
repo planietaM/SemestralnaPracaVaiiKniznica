@@ -30,12 +30,19 @@
         <th>ID</th>
         <th>Názov</th>
         <th>Autor</th>
+        <th>tlacidlo</th>
     </tr>
     <?php foreach ($books as $book): ?>
         <tr>
             <td><?= $book->getId() ?></td>
             <td><?= $book->getNazovKnizky() ?></td>
             <td><?= $book->getMenoAutora() ?></td>
+            <td>
+                <button type="button"
+                        onclick="window.location.href='<?= $link->url("auth.login") ?>'"
+                        class="btn btn-primary"> Prihlas Sa
+                </button>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

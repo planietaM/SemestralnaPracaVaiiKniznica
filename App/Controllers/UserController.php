@@ -10,12 +10,12 @@ use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
 
-class AdminController extends BaseController
+class UserController extends BaseController
 {
 
     public function authorize(Request $request, string $action): bool
     {
-        if($this->user->getRola() === 'admin') {
+        if($this->user->getRola() === 'user') {
             return $this->user->isLoggedIn();
         }
         return false;
