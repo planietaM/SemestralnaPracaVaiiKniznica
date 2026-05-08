@@ -9,7 +9,8 @@ use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
 use Framework\Core\BaseController;
 
-class PozicaneKnihyController extends BaseController{
+class PozicaneKnihyController extends BaseController
+{
 
     public function index(Request $request): Response
     {
@@ -50,21 +51,20 @@ class PozicaneKnihyController extends BaseController{
 
             if ($existujeUser == false) {
                 $message = "Neexistuje uživatel s tímto ID!";
-            }else{
+            } else {
                 foreach ($vsetkyPozicaneKnizky as $knizka) {
                     if ($knizka->getIdUzivatela() == $idPoziciavatela &&
                         $idOriginalKopie == $knizka->getIdOriginaluKnizky() &&
                         $knizka->getDatumVratenia() == null
-                        )
-                        {
+                    ) {
                         $maUzPozicanuTakutoKnizku = true;
                         break;
-                        }
+                    }
                 }
 
-                if($maUzPozicanuTakutoKnizku == true){
+                if ($maUzPozicanuTakutoKnizku == true) {
                     $message = "Zakaznik uz ma pozicanu tuto knizku!";
-                }else{
+                } else {
                     try {
                         $pozicanie = new \App\Models\borrowbooks();
                         $pozicanie->setIdUzivatela($idPoziciavatela);
@@ -93,4 +93,54 @@ class PozicaneKnihyController extends BaseController{
             'message' => $message
         ], 'pozicaj');
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function vratit(Request $request): Response
+    {
+        $idPozicania = $_POST['idPozicania'] ?? null;
+        $vsetkyPozicaneKnizky = \App\Models\borrowbooks::getAll();
+        $kopieKniziek = \App\Models\bookcopies::getAll();
+
+        if ($request->isPost()) {
+
+
+            foreach ($vsetkyPozicaneKnizky as $knizka) {
+                if ($knizka->getId() == $idPozicania) {
+
+                    foreach ($kopieKniziek as $kopia) {
+                        if ($kopia->getIdOriginalKopie() == $knizka->getIdOriginaluKnizky() && $kopia->getId() == $knizka->getIdKnizky()) {
+                            $kopia->setDostupna(1);
+                            $kopia->save();
+                            break;
+                        }
+                    }
+
+                    $knizka->setDatumVratenia(date('Y-m-d'));
+                    $knizka->setDostupna(1);
+                    $knizka->save();
+                    break;
+                }
+            }
+
+
+        }
+        return $this->redirect($this->url("admin.index"));
+    }
+
+    public function vymaz(Request $request): Response
+    {
+        $idPozicania = $_POST['idPozicania'] ?? null;
+        $pozicanie = \App\Models\borrowbooks::getOne($idPozicania);
+
+        if (!is_null($pozicanie)) {
+            $pozicanie->delete();
+        }
+
+        return $this->redirect($this->url("admin.index"));
+
+
+    }
+
 }

@@ -8,8 +8,8 @@ class borrowbooks extends Model{
     protected ?int $idUzivatela = null;
     protected ?int $idKnizky = null;
     protected ?int $idOriginaluKnizky = null;
-    protected ?\DateTime $datumPozicania = null;
-    protected ?\DateTime $datumVratenia = null;
+    protected ?string $datumPozicania = null;  // Zmeň z DateTime na string
+    protected ?string $datumVratenia = null;
     protected ?int $dostupna = null;
 
     public function getId(): ?int
@@ -39,12 +39,12 @@ class borrowbooks extends Model{
 
     public function getDatumPozicania(string $format = 'Y-m-d'): ?string
     {
-        return $this->datumPozicania?->format($format);
+        return $this->datumPozicania;  // Vrač priamo string
     }
 
     public function getDatumVratenia(string $format = 'Y-m-d'): ?string
     {
-        return $this->datumVratenia?->format($format);
+        return $this->datumVratenia;
     }
 
     public function getDostupna(): ?int
@@ -74,12 +74,12 @@ class borrowbooks extends Model{
 
     public function setDatumPozicania(?string $datum): void
     {
-        $this->datumPozicania = $datum ? new \DateTime($datum) : null;
+        $this->datumPozicania = $datum;
     }
 
     public function setDatumVratenia(?string $datum): void
     {
-        $this->datumVratenia = $datum ? new \DateTime($datum) : null;
+        $this->datumVratenia = $datum;
     }
 
     public function setDostupna(?int $dostupna): void
