@@ -2,6 +2,9 @@
 
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Auth\AppUser $user */
+/** @var \Framework\Support\View $view */
+
+
 ?>
 
 <div class="container-fluid">
@@ -30,19 +33,12 @@
         <th>ID</th>
         <th>Názov</th>
         <th>Autor</th>
-        <th>tlacidlo</th>
     </tr>
     <?php foreach ($books as $book): ?>
         <tr>
             <td><?= $book->getId() ?></td>
             <td><?= $book->getNazovKnizky() ?></td>
             <td><?= $book->getMenoAutora() ?></td>
-            <td>
-                <button type="button"
-                        onclick="window.location.href='<?= $link->url("auth.login") ?>'"
-                        class="btn btn-primary"> Prihlas Sa
-                </button>
-            </td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -87,12 +83,21 @@
         <th>ID</th>
         <th>ID Originálu</th>
         <th>Dostupná</th>
+        <th>Tlacidlo</th>
     </tr>
     <?php foreach ($bookcopies as $copy): ?>
         <tr>
             <td><?= $copy->getId() ?></td>
             <td><?= $copy->getIdOriginalKopie() ?></td>
             <td><?= $copy->getDostupna() ?></td>
+            <td>
+                <form method="POST"
+                      action="<?= $link->url("pozicaneKnihy.pozicaj") ?>">
+                    <input type="hidden" name="idDanejKnihy" value="<?= $copy->getIdDanejKnihy() ?>">
+                    <input type="hidden" name="IdOriginalKopie" value="<?= $copy->getIdOriginalKopie() ?>">
+                    <button type="submit" class="btn btn-primary">Požičaj</button>
+                </form>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

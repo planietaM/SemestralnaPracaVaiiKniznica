@@ -32,6 +32,11 @@ class borrowbooks extends Model{
         return $this->idKnizky;
     }
 
+    public function getIdOriginaluKnizky(): ?int
+    {
+        return $this->idOriginaluKnizky;
+    }
+
     public function getDatumPozicania(string $format = 'Y-m-d'): ?string
     {
         return $this->datumPozicania?->format($format);
@@ -60,6 +65,11 @@ class borrowbooks extends Model{
     public function setIdKnizky(?int $idKnizky): void
     {
         $this->idKnizky = $idKnizky;
+    }
+
+    public function setIdOriginaluKnizky(?int $idOriginaluKnizky): void
+    {
+        $this->idOriginaluKnizky= $idOriginaluKnizky;
     }
 
     public function setDatumPozicania(?string $datum): void
