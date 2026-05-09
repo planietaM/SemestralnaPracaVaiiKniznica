@@ -160,53 +160,56 @@
                     <button type="submit" class="btn btn-primary">Požičaj</button>
                 </form>
             </td>
-            <td>
-                <form method="POST"
-                      action="<?= $link->url("pozicaneKnihy.vymaz") ?>">
-                    <input type="hidden" name="idDanejKnihy" value="<?= $copy->getIdDanejKnihy() ?>">
-                    <input type="hidden" name="IdOriginalKopie" value="<?= $copy->getIdOriginalKopie() ?>">
-                    <button type="submit" class="btn btn-primary">Vymaz</button>
-                </form>
-            </td>
+
         </tr>
     <?php endforeach; ?>
 </table>
 
 
 
-<h2>Záznam požičania</h2>
+<h2>Požičané knihy</h2>
 <table border="1">
     <tr>
         <th>ID</th>
-        <th>Názov knižky</th>
-        <th>Meno autora</th>
         <th>ID Užívateľa</th>
+        <th>Nazov knizky</th>
+        <th>Meno autora</th>
         <th>Dátum požičania</th>
-        <th>Vrátiť</th>
-        <th>Vymazať</th>
+        <th>Odstranit</th>
     </tr>
     <?php foreach ($borrowbooks as $borrow): ?>
         <?php
+
         $nazov = "";
-        $autor = "";
-        foreach ($bookcopies as $book) {
+        $autor= "";
+        foreach ($books as $book) {
             if ($book->getId() == $borrow->getIdOriginaluKnizky()) {
                 $nazov = $book->getNazovKnizky();
                 $autor = $book->getMenoAutora();
                 break;
             }
+
         }
+
+
         ?>
         <tr>
             <td><?= $borrow->getId() ?></td>
-            <td><?= $nazov ?></td>
-            <td><?= $autor ?></td>
             <td><?= $borrow->getIdUzivatela() ?></td>
+            <td><?= $nazov ?></td>
+            <td><?= $autor?></td>
             <td><?= $borrow->getDatumPozicania() ?></td>
             <td>
-                <form method="POST" action="<?= $link->url("pozicaneKnihy.vymaz") ?>" style="display:inline;">
+                <form method="POST" action="<?= $link->url("pozicaneKnihy.vymaz") ?>" >
                     <input type="hidden" name="idPozicania" value="<?= $borrow->getId() ?>">
                     <button type="submit" class="btn btn-danger">Vymazať</button>
+                </form>
+            </td>
+
+            <td>
+                <form method="POST" action="<?= $link->url("pozicaneKnihy.uprav") ?>" >
+                    <input type="hidden" name="idPozicania" value="<?= $borrow->getId() ?>">
+                    <button type="submit" class="btn btn-danger">Uprav</button>
                 </form>
             </td>
         </tr>
