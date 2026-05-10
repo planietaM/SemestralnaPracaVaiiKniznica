@@ -82,7 +82,7 @@ class ViewResponse extends Response
         require dirname(__DIR__, 3)
             . DIRECTORY_SEPARATOR . 'App'
             . DIRECTORY_SEPARATOR . 'Views'
-            . DIRECTORY_SEPARATOR . ($this->viewName . 'uprav.view.php');
+            . DIRECTORY_SEPARATOR . ($this->viewName . '.view.php');
         $contentHTML = ob_get_clean();
 
         if ($selectedLayout !== null) {

@@ -49,11 +49,6 @@ $dostupnaVrateniaPozicaniaKnizky = $pozicanaKnizka->getDostupna();
 
                     <form class="form-signin" method="post" action="<?= $link->url("uprav") ?>">
 
-                        <div class="form-label-group mb-3">
-                            <label for="id" class="form-label">ID</label>
-                            <input name="id" type="number" id="id" class="form-control"
-                                   placeholder=<?= $idPozicaniaPozicanejKnizky ?> >
-                        </div>
 
                         <div class="form-label-group mb-3">
                             <label for="idUzivatela" class="form-label">ID Užívateľa</label>

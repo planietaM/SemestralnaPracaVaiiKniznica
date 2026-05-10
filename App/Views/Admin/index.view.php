@@ -33,15 +33,38 @@
         <th>ID</th>
         <th>Názov</th>
         <th>Autor</th>
+        <th>Odstranit</th>
+        <th>Upravit</th>
+
     </tr>
     <?php foreach ($books as $book): ?>
         <tr>
             <td><?= $book->getId() ?></td>
             <td><?= $book->getNazovKnizky() ?></td>
             <td><?= $book->getMenoAutora() ?></td>
+
+            <td>
+                <form method="POST" action="<?= $link->url("knihy.vymaz") ?>" >
+                    <input type="hidden" name="idKnizky" value="<?= $book->getId() ?>">
+                    <button type="submit" class="btn btn-danger">Vymazať</button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="<?= $link->url("knihy.uprav") ?>" >
+                    <input type="hidden" name="idKnizky" value="<?= $book->getId() ?>">
+                    <button type="submit" class="btn btn-danger">Uprav</button>
+                </form>
+            </td>
         </tr>
+
     <?php endforeach; ?>
 </table>
+
+
+
+
+
+
 
 <h2>Používatelia</h2>
 <table border="1">
@@ -174,8 +197,11 @@
         <th>ID Užívateľa</th>
         <th>Nazov knizky</th>
         <th>Meno autora</th>
-        <th>Dátum požičania</th>
+        <th>Dátum požičania     </th>
+        <th>Dátum vratenia      </th>
+        <th>Dostupna     </th>
         <th>Odstranit</th>
+        <th>Upravit</th>
     </tr>
     <?php foreach ($borrowbooks as $borrow): ?>
         <?php
@@ -199,6 +225,8 @@
             <td><?= $nazov ?></td>
             <td><?= $autor?></td>
             <td><?= $borrow->getDatumPozicania() ?></td>
+            <td><?= $borrow->getDatumVratenia() ?></td>
+            <td><?= $borrow->getDostupna() ?></td>
             <td>
                 <form method="POST" action="<?= $link->url("pozicaneKnihy.vymaz") ?>" >
                     <input type="hidden" name="idPozicania" value="<?= $borrow->getId() ?>">

@@ -152,54 +152,140 @@ class PozicaneKnihyController extends BaseController
 
     public function uprav(Request $request): Response
     {
-        // Získaj ID požičania z POST
-        $idPozicania = $_POST['idPozicania'] ?? null;
+
+        $users = users::getAll();
+        $borrowbooks = borrowbooks::getAll();
+        $books = books::getAll();
+        $bookcopies = bookcopies::getAll();
+
+        if ($request->isPost() == false) {
+            return $this->redirect($this->url("admin.index"));
+        }
+
+
+        $idPozicania = $request->post('idPozicania') ?? null;
+        $idUzivatela = $request->post('idUzivatela') ?: null;
+        $dostupna = $request->post('dostupna') ?: null;
+        $datumVratenia = $request->post('datumVratenia') ?: null;
+        $datumPozicania = $request->post('datumPozicania') ?: null;
+        $idKnizky = $request->post('idKnizky') ?: null;
+        $idOriginaluKnizky = $request->post('idOriginaluKnizky') ?: null;
+
         $message = null;
 
-        // Ak chýba ID, presmeruj na admin
-        if (is_null($idPozicania)) {
-            return $this->redirect($this->url("admin.index"));
-        }
+        $pozicanaKnizka = borrowbooks::getOne($idPozicania);
 
-        // Získaj požičanie z databázy
-        $pozicanaKnizka = \App\Models\borrowbooks::getOne($idPozicania);
+        if ($request->post('submit') !== null) {
 
-        // Ak požičanie neexistuje, presmeruj na admin
-        if (is_null($pozicanaKnizka)) {
-            return $this->redirect($this->url("admin.index"));
-        }
 
-        // Spracuj POST požiadavku (formulár na úpravu)
-        if ($request->isPost()) {
+            if ($idUzivatela!= null) {
+                $existujeUser = false;
+                foreach ($users as $user) {
+                    if($user->getId() == $idUzivatela) {
+                        $existujeUser = true;
+                        if($user->getRola() == 'admin') {
+                            $message = "Admin si nemoze pozicat Knihu";
+                        }
+                        break;
+                    }
+                }
+                if ($existujeUser == false) {
+                    $message = "Toto id neexistuje";
+                }
+                $pozicanaKnizka->setIdUzivatela($idUzivatela);
+            }
+
+            if ($dostupna !== null) {
+                if($dostupna == 0){
+                    $message = "Knizku nieje mozne pozicat pretoze neviem komu";
+                }elseif($dostupna != 1){
+                    $message = "Neplatna hodnota pro dostupna. Použijte 0 nebo 1.";
+                }else if($pozicanaKnizka->getDostupna() == $dostupna) {
+                    $message = "Zadavas to istu dostupnost, ktora ma tato pozicanie";
+                }else{
+                    foreach ($bookcopies as $book) {
+                        if($book->getId() == $pozicanaKnizka->getIdKnizky() && $book->getIdOriginalKopie() == $pozicanaKnizka->getIdOriginaluKnizky()){
+                            $book->setDostupna($dostupna);
+                            $book->save();
+                            break;
+                        }
+                    }
+                    $pozicanaKnizka->setDostupna($dostupna);
+                    $pozicanaKnizka->setDatumVratenia(date('Y-m-d'));
+                }
+
+            }
+
+
+            if ($datumVratenia!= null) {
+
+                if($pozicanaKnizka->getDatumPozicania() > $datumVratenia  && $pozicanaKnizka->getDatumVratenia() != null) {
+                    $message = "Chces vratit knizku skorej nez bola pozicana";
+                }else {
+                    $pozicanaKnizka->setDatumVratenia($datumVratenia);
+                }
+            }
+
+             if ($datumPozicania!= null) {
+                if($pozicanaKnizka->getDatumVratenia() < $datumPozicania) {
+                    $message = "Chces pozicat knizku neskor nez bola vratena";
+                }else{
+                $pozicanaKnizka->setDatumPozicania($datumPozicania);
+                }
+             }
+
+
+
+            if($idKnizky != null) {
+
+                $existujeKniha = false;
+
+                foreach ($bookcopies as $book) {
+                    if($book->getId() == $idKnizky){
+                        $existujeKniha = true;
+                        $dostupnaKNiha = $book->getDostupna();
+                         if($dostupnaKNiha == 0){
+                            $message = "Tato knizka neni dostupna";
+                        }
+                        break;
+                    }
+                }
+                if ($existujeKniha == false) {
+                    $message = "Toto id knizky neexistuje";
+                }
+                $pozicanaKnizka->setIdKnizky($idKnizky);
+            }
+
+             if ($idOriginaluKnizky != null) {
+                $existujeKniha = false;
+                $maDanyKus = false;
+                foreach ($books as $book) {
+                    if($book->getId() == $idOriginaluKnizky){
+                        $existujeKniha = true;
+                        foreach ($bookcopies as $bookCopie) {
+                            if($bookCopie->getId() == $pozicanaKnizka->getIdKnizky() &&
+                                $idOriginaluKnizky ==  $bookCopie->getIdOriginalKopie()){
+                                $maDanyKus = true;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                if ($existujeKniha == false) {
+                    $message = "Toto id originalu knizky neexistuje";
+                }elseif($maDanyKus == false) {
+                    $message = "Tato knizka nema k tomuto originalu dany kus";
+                }
+                $pozicanaKnizka->setIdOriginaluKnizky($idOriginaluKnizky);
+            }
+
             try {
-                // Nastav nové hodnoty
-                if (!empty($request->post('idUzivatela'))) {
-                    $pozicanaKnizka->setIdUzivatela($request->post('idUzivatela'));
-                }
-                if (!empty($request->post('idKnizky'))) {
-                    $pozicanaKnizka->setIdKnizky($request->post('idKnizky'));
-                }
-                if (!empty($request->post('idOriginaluKnizky'))) {
-                    $pozicanaKnizka->setIdOriginaluKnizky($request->post('idOriginaluKnizky'));
-                }
-                if (!empty($request->post('datumPozicania'))) {
-                    $pozicanaKnizka->setDatumPozicania($request->post('datumPozicania'));
-                }
-                if (!empty($request->post('datumVratenia'))) {
-                    $pozicanaKnizka->setDatumVratenia($request->post('datumVratenia'));
-                } else {
-                    $pozicanaKnizka->setDatumVratenia(null);
-                }
-                if ($request->post('dostupna') !== null && $request->post('dostupna') !== '') {
-                    $pozicanaKnizka->setDostupna($request->post('dostupna'));
-                }
+                if($message == null) {
+                    $pozicanaKnizka->save();
 
-                // Ulož zmeny do databázy
-                $pozicanaKnizka->save();
-
-                // Presmeruj na admin s potvrdením
-                return $this->redirect($this->url("admin.index"));
-
+                    return $this->redirect($this->url("admin.index"));
+                }
             } catch (\Exception $e) {
                 $message = "Chyba pri úprave požičania: " . $e->getMessage();
             }

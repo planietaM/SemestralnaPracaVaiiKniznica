@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\books;
-use App\Models\Pouzivatelia;
 use App\Models\bookcopies;
 use App\Models\users;
 use Framework\Http\Request;
@@ -37,13 +36,17 @@ class KnihyController extends BaseController
         ], "kopieKniziek");
     }
 
-    public function pozicajSiKnihu (Request $request): Response{
+    public function vymaz(Request $request): Response
+    {
+        $idKnihy = $_POST['idKnizky'] ?? null;
 
+        $pozicanie = books::getOne($idKnihy);
 
+        if (!is_null($pozicanie)) {
+            $pozicanie->delete();
+        }
 
-
-
-
+        return $this->redirect($this->url("admin.index"));
     }
 
 
@@ -101,4 +104,58 @@ class KnihyController extends BaseController
             'message' => $message
         ], 'pridajKnihu');
     }
+
+
+    public function uprav(Request $request): Response
+    {
+        $message = null;
+        $kniha = null;
+
+        $idKnihy = $_POST['idKnizky'] ?? null;
+
+
+        if ($idKnihy) {
+            $kniha = books::getOne($idKnihy);
+        }
+
+        if (!$kniha) {
+            return $this->redirect($this->url("admin.index"));
+        }
+
+        // Skontroluj či je to POST s formulárom na úpravu (s submit buttonom)
+        if ($request->isPost() && $request->post('submit')) {
+            $nazovKnizky = $request->post('nazovKnizky') ?: null;
+            $menoAutora = $request->post('menoAutora') ?: null;
+            $fotkaKnizky = $request->post('fotkaKnizky') ?: null;
+
+            if (empty($nazovKnizky) && empty($menoAutora) && empty($fotkaKnizky)) {
+                $message = "Musíš zmeniť aspoň jedno pole!";
+            } elseif ($nazovKnizky && strlen($nazovKnizky) < 5) {
+                $message = "Je príliš krátky názov knihy";
+            } else {
+                try {
+                    if ($nazovKnizky) {
+                        $kniha->setNazovKnizky($nazovKnizky);
+                    }
+                    if ($menoAutora) {
+                        $kniha->setMenoAutora($menoAutora);
+                    }
+                    if ($fotkaKnizky) {
+                        $kniha->setFotkaKnizky($fotkaKnizky);
+                    }
+                    $kniha->save();
+
+                    return $this->redirect($this->url("admin.index"));
+                } catch (\Exception $e) {
+                    $message = "Chyba pri úprave: " . $e->getMessage();
+                }
+            }
+        }
+
+        return $this->html([
+            'kniha' => $kniha,
+            'message' => $message
+        ], 'uprav');
+    }
+
 }
