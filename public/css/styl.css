@@ -5,3 +5,62 @@
 .navbar-brand img {
     width: 50px;
 }
+
+.sive-pozadie {
+    background-color: gray;
+}
+
+.hnedy-pozadie {
+    background-color: rosybrown;
+}
+
+.nadpisovy-fond {
+    font-family: "Times New Roman", Times, serif;
+    color: saddlebrown;
+}
+.podnadpisovy-fond {
+    font-family: "Times New Roman", Times, serif;
+    color: black;
+}
+
+.pozadie-stranky {
+    background-color: lightgray;
+    width: 100%;
+    margin: 0;
+    padding: 0  !important;;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+.tlacidlo-vymazania {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tlacidlo-uprav {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tlacidlo-potvrdenia {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.tlacidlo-prekliknutie {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}

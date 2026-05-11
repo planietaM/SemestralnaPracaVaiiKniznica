@@ -23,10 +23,10 @@ class SimpleAuthenticator extends SessionAuthenticator {
         foreach (users::getAll() as $user) {
             if ($user->getMeno() === $username || $user->getEmail() === $username) {
                 if (password_verify($password, $user->getHeslo())) {
-                    return $user; // vráť users objekt, nie true
+                    return $user;
                 }
             }
         }
-        return null; // nie false, ale null
+        return null;
     }
 }

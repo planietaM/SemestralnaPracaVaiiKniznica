@@ -23,16 +23,12 @@
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-sm bg-light">
+
+<nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
 
         <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('knihy.celkovyPocet') ?>">skusame</a>
-            </li>
+
 
             <li class="nav-item">
                 <a class="nav-link" href="<?= $link->url('knihy.index') ?>">Pokrocile Vyhladavanie</a>

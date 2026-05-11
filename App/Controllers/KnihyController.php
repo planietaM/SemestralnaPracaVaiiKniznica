@@ -106,13 +106,14 @@ class KnihyController extends BaseController
     }
 
 
+
     public function uprav(Request $request): Response
     {
         $message = null;
         $kniha = null;
 
-        $idKnihy = $_POST['idKnizky'] ?? null;
-
+        // Skontroluj idKnizky z POST alebo parametrov
+        $idKnihy = $request->post('idKnizky') ?? null;
 
         if ($idKnihy) {
             $kniha = books::getOne($idKnihy);
@@ -122,11 +123,11 @@ class KnihyController extends BaseController
             return $this->redirect($this->url("admin.index"));
         }
 
-        // Skontroluj či je to POST s formulárom na úpravu (s submit buttonom)
-        if ($request->isPost() && $request->post('submit')) {
-            $nazovKnizky = $request->post('nazovKnizky') ?: null;
-            $menoAutora = $request->post('menoAutora') ?: null;
-            $fotkaKnizky = $request->post('fotkaKnizky') ?: null;
+        // Ak je POST požiadavka a existuje aspoň jedno pole na úpravu
+        if ($request->isPost()) {
+            $nazovKnizky = trim($request->post('nazovKnizky') ?? '');
+            $menoAutora = trim($request->post('menoAutora') ?? '');
+            $fotkaKnizky = trim($request->post('fotkaKnizky') ?? '');
 
             if (empty($nazovKnizky) && empty($menoAutora) && empty($fotkaKnizky)) {
                 $message = "Musíš zmeniť aspoň jedno pole!";
@@ -134,13 +135,13 @@ class KnihyController extends BaseController
                 $message = "Je príliš krátky názov knihy";
             } else {
                 try {
-                    if ($nazovKnizky) {
+                    if (!empty($nazovKnizky)) {
                         $kniha->setNazovKnizky($nazovKnizky);
                     }
-                    if ($menoAutora) {
+                    if (!empty($menoAutora)) {
                         $kniha->setMenoAutora($menoAutora);
                     }
-                    if ($fotkaKnizky) {
+                    if (!empty($fotkaKnizky)) {
                         $kniha->setFotkaKnizky($fotkaKnizky);
                     }
                     $kniha->save();

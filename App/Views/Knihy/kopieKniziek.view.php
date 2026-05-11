@@ -42,6 +42,10 @@
 
     <script src="/js/script.js"></script>
 
+    <button type="button "
+            onclick="window.location.href='<?= $link->url("home.index") ?>'"
+            class="btn btn-primary  tlacidlo-prekliknutie" >Hlavná stránka
+    </button>
 
 
 
