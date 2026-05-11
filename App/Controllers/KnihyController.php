@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\books;
 use App\Models\bookcopies;
+use App\Models\borrowbooks;
 use App\Models\users;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -42,6 +43,24 @@ class KnihyController extends BaseController
 
         $pozicanie = books::getOne($idKnihy);
 
+        $borrowbooks = borrowbooks::getAll();
+        $bookcopies = bookcopies::getAll();
+
+
+        foreach ($borrowbooks as $borrow){
+            if($borrow->getIdOriginaluKnizky() == $idKnihy){
+                $borrow->delete();
+            }
+        }
+
+
+        foreach ($bookcopies as $book){
+            if($book->getIdOriginalKopie() == $idKnihy){
+                $book->delete();
+            }
+        }
+
+
         if (!is_null($pozicanie)) {
             $pozicanie->delete();
         }
@@ -62,8 +81,8 @@ class KnihyController extends BaseController
             $pocetKopii = $request->post('pocetKopii');
 
 
-
-
+            // Skontroluj, či súbor existuje
+            $cestaSuboru = __DIR__ . '/../../public/images/' . $fotkaKnizky . '.webp';
 
 
 
@@ -73,7 +92,10 @@ class KnihyController extends BaseController
                 $message = "Je kratky nazov knizky";
             } elseif ($pocetKopii <= 0) {
                 $message = "zadal si zly pocet Knihh";
-            } else {
+            }elseif (!file_exists($cestaSuboru)){
+                $message = "Neplatný názov fotky";
+            }
+            else {
                 try {
                     // Musí sa volať presne ako class v modeli: users
                     $book = new \App\Models\books();
@@ -129,11 +151,15 @@ class KnihyController extends BaseController
             $menoAutora = trim($request->post('menoAutora') ?? '');
             $fotkaKnizky = trim($request->post('fotkaKnizky') ?? '');
 
+            $cestaSuboru = __DIR__ . '/../../public/images/' . $fotkaKnizky . '.webp';
+
             if (empty($nazovKnizky) && empty($menoAutora) && empty($fotkaKnizky)) {
                 $message = "Musíš zmeniť aspoň jedno pole!";
             } elseif ($nazovKnizky && strlen($nazovKnizky) < 5) {
                 $message = "Je príliš krátky názov knihy";
-            } else {
+            } elseif (!file_exists($cestaSuboru)){
+                $message = "Neplatný názov fotky";
+            }else {
                 try {
                     if (!empty($nazovKnizky)) {
                         $kniha->setNazovKnizky($nazovKnizky);

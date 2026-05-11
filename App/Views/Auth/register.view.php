@@ -49,13 +49,18 @@ $view->setLayout('auth');
                         </div>
 
 
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="submit" name="submit">Vztvoorit účet
+                        <div class="text-center ">
+                            <button class="btn btn-primary tlacidlo-prekliknutie p-1" type="submit" name="submit">Vztvoorit účet
                             </button>
 
                             <button type="button"
                                     onclick="window.location.href='<?= $link->url("auth.login") ?>'"
-                                    class="btn btn-primary"> Prihlas Sa
+                                    class="btn btn-primary tlacidlo-prekliknutie p-1"> Prihlas Sa
+                            </button>
+
+                            <button type="button "
+                                    onclick="window.location.href='<?= $link->url("home.index") ?>'"
+                                    class="btn btn-primary  tlacidlo-prekliknutie p-1" >Hlavná stránka
                             </button>
                         </div>
 

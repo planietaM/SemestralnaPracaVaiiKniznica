@@ -50,7 +50,7 @@
                     <button class="btn btn-primary tlacidlo-potvrdenia" type="submit" name="submit">Pridaj Knizku
                     </button>
                     <button type="button "
-                            onclick="window.location.href='<?= $link->url("home.index") ?>'"
+                            onclick="window.location.href='<?= $link->url("admin.index") ?>'"
                             class="btn btn-primary  tlacidlo-prekliknutie" >Hlavná stránka
                     </button>
                 </div>

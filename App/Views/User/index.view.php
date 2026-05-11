@@ -1,74 +1,121 @@
 <?php
+/** @var \Framework\Support\LinkGenerator $link */
+/** @var \Framework\Auth\AppUser $user */
+/** @var \Framework\Support\View $view */
 /** @var array $books */
 /** @var array $borrowbooks */
 /** @var array $users */
 /** @var array $bookcopies */
 ?>
 
-    <h1>Blbyyyy userikkkkkk</h1>
+<div class="container-fluid px-5 py-1">
+    <div class="container-fluid">
 
-    <h2>Knihy</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Názov</th>
-            <th>Autor</th>
-        </tr>
-        <?php foreach ($books as $book): ?>
-            <tr>
-                <td><?= $book->getId() ?></td>
-                <td><?= $book->getNazovKnizky() ?></td>
-                <td><?= $book->getMenoAutora() ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+        <div class="text-center nadpisovy-fond">
+            <h1><strong>Vytaj <?= $user->getName()?></strong></h1>
+        </div>
 
-    <h2>Používatelia</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Meno</th>
-            <th>Email</th>
-        </tr>
-        <?php foreach ($users as $user): ?>
-            <tr>
-                <td><?= $user->getId() ?></td>
-                <td><?= $user->getMeno() ?></td>
-                <td><?= $user->getEmail() ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+        <div class="text-center nadpisovy-fond">
+            <h2>Požičané knihy</h2>
+        </div>
 
-    <h2>Požičané knihy</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>ID Užívateľa</th>
-            <th>ID Knihy</th>
-            <th>Dátum požičania</th>
-        </tr>
-        <?php foreach ($borrowbooks as $borrow): ?>
-            <tr>
-                <td><?= $borrow->getId() ?></td>
-                <td><?= $borrow->getIdUzivatela() ?></td>
-                <td><?= $borrow->getIdKnizky() ?></td>
-                <td><?= $borrow->getDatumPozicania() ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" border="2">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Užívateľa</th>
+                    <th>Nazov knizky</th>
+                    <th>Meno autora</th>
+                    <th>Dátum požičania</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($borrowbooks as $borrow): ?>
+                    <?php
+                    if ($borrow->getDatumVratenia() != null) {
+                        continue;
+                    }
+                    if($borrow->getIdUzivatela() != $user->getId()){
+                        continue;
+                    }
+                    $nazov = "";
+                    $autor = "";
+                    foreach ($books as $book) {
+                        if ($book->getId() == $borrow->getIdOriginaluKnizky()) {
+                            $nazov = $book->getNazovKnizky();
+                            $autor = $book->getMenoAutora();
+                            break;
+                        }
+                    }
+                    ?>
+                    <tr>
+                        <td><?= $borrow->getId() ?></td>
+                        <td><?= $borrow->getIdUzivatela() ?></td>
+                        <td><?= $nazov ?></td>
+                        <td><?= $autor ?></td>
+                        <td><?= $borrow->getDatumPozicania() ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-    <h2>Kópie kníh</h2>
-    <table border="1">
-    <tr>
-        <th>ID</th>
-        <th>ID Originálu</th>
-        <th>Dostupná</th>
-    </tr>
-<?php foreach ($bookcopies as $copy): ?>
-    <tr>
-        <td><?= $copy->getId() ?></td>
-        <td><?= $copy->getIdOriginalKopie() ?></td>
-        <td><?= $copy->getDostupna() ?></td>
-    </tr>
-<?php endforeach; ?>
-    </table><?php
+
+        <div class="text-center nadpisovy-fond">
+            <h2>Upomienkove knihy</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" border="2">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Užívateľa</th>
+                    <th>Nazov knizky</th>
+                    <th>Meno autora</th>
+                    <th>Dátum požičania</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($borrowbooks as $borrow): ?>
+                    <?php
+                    if ($borrow->getDatumVratenia() != null) {
+                        continue;
+                    }
+
+                    $limitDatum = new DateTime();
+                    $limitDatum->modify('-2 months');
+
+                    $datumPozicaniaDT = new DateTime($borrow->getDatumPozicania());
+
+                    if ($datumPozicaniaDT > $limitDatum) {
+                        continue;
+                    }
+
+                    if($borrow->getIdUzivatela() != $user->getId()){
+                        continue;
+                    }
+                    $nazov = "";
+                    $autor = "";
+                    foreach ($books as $book) {
+                        if ($book->getId() == $borrow->getIdOriginaluKnizky()) {
+                            $nazov = $book->getNazovKnizky();
+                            $autor = $book->getMenoAutora();
+                            break;
+                        }
+                    }
+                    ?>
+                    <tr>
+                        <td><?= $borrow->getId() ?></td>
+                        <td><?= $borrow->getIdUzivatela() ?></td>
+                        <td><?= $nazov ?></td>
+                        <td><?= $autor ?></td>
+                        <td><?= $borrow->getDatumPozicania() ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -33,12 +33,7 @@
                         <td><?= htmlspecialchars($kniha->getNazovKnizky()) ?></td>
                         <td><?= htmlspecialchars($kniha->getMenoAutora()) ?></td>
                         <td>
-                            <?php if ($kniha->getFotkaKnizky()): ?>
-                                <img src="<?= htmlspecialchars($kniha->getFotkaKnizky()) ?>"
-                                     height="50">
-                            <?php else: ?>
-                                <span class="text-muted">—</span>
-                            <?php endif ?>
+                            <img src="/images/<?= htmlspecialchars($kniha->getFotkaKnizky()) ?>.webp" height="100">
                         </td>
                     </tr>
                 <?php endforeach ?>
@@ -46,12 +41,12 @@
             </table>
         </div>
 
-        <script src="/js/script.js"></script>
-
-        <button type="button "
+    </div>
+        <button type="button"
                 onclick="window.location.href='<?= $link->url("home.index") ?>'"
                 class="btn btn-primary  tlacidlo-prekliknutie" >Hlavná stránka
         </button>
     </div>
 </div>
 
+<script type="module" src="<?= $link->asset('js/pokrocileHladanie.js') ?>"></script>

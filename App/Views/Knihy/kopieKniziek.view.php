@@ -9,14 +9,11 @@
 
 
 
-    <div class="row ">
-        <div class="col ">
-            <div class="text-center">
-                <h2>Vsetky knizky</h2>
-            </div>
-        </div >
 
+    <div class="text-center nadpisovy-fond">
+        <h2>Vsetky knizky</h2>
     </div>
+
 
 
     <div class="table-responsive">

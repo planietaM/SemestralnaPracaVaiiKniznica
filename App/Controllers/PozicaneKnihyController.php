@@ -227,12 +227,16 @@ class PozicaneKnihyController extends BaseController
             }
 
              if ($datumPozicania!= null) {
-                if($pozicanaKnizka->getDatumVratenia() < $datumPozicania) {
-                    $message = "Chces pozicat knizku neskor nez bola vratena";
-                }else{
-                $pozicanaKnizka->setDatumPozicania($datumPozicania);
+                 if($pozicanaKnizka->getDatumVratenia() != null) {
+                    if($pozicanaKnizka->getDatumVratenia() < $datumPozicania) {
+                        $message = "Chces pozicat knizku neskor nez bola vratena";
+                    }else{
+                    $pozicanaKnizka->setDatumPozicania($datumPozicania);
+                    }
+                 } else{
+                        $pozicanaKnizka->setDatumPozicania($datumPozicania);
                 }
-             }
+            }
 
 
 

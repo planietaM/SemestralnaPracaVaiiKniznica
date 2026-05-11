@@ -29,7 +29,11 @@ $view->setLayout('auth');
                                    placeholder="Password" required>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit" name="submit">Log in
+                            <button class="btn btn-primary tlacidlo-prekliknutie" type="submit" name="submit">Log in
+                            </button>
+                            <button type="button "
+                                    onclick="window.location.href='<?= $link->url("home.index") ?>'"
+                                    class="btn btn-primary  tlacidlo-prekliknutie" >Hlavná stránka
                             </button>
                         </div>
                     </form>

@@ -21,6 +21,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
+
 </head>
 <body>
 
@@ -33,14 +34,24 @@
             <li class="nav-item">
                 <a class="nav-link" href="<?= $link->url('knihy.index') ?>">Pokrocile Vyhladavanie</a>
             </li>
-
             <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('knihy.pridajKnihu') ?>">PridajKnihu</a>
+                <a class="nav-link" href="<?= $link->url('knihy.kopieKniziek') ?>">Vsetky knizky</a>
             </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('knihy.kopieKniziek') ?>">PridajKnihu</a>
-            </li>
+            <?php if ($user->isLoggedIn()) { ?>
+                <?php if ($user->getName() == 'admin') { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $link->url('admin.index') ?>">Admin stranka</a>
+                    </li>
+                <?php } else{ ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $link->url('user.index') ?>">User stranka</a>
+                    </li>
+                <?php } ?>
+            <?php } else { ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $link->url('home.index') ?>">Domovska stranka</a>
+                </li>
+            <?php } ?>
 
         </ul>
 

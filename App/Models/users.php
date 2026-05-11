@@ -71,6 +71,11 @@ class users extends Model implements IIdentity {
         $this->id = $id;
     }
 
+    public function getIdentity(): ?string
+    {
+        return $this->rolaPouzivatela;
+    }
+
 
 
 }
