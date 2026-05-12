@@ -17,7 +17,7 @@
 
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover" border="2">
+            <table class="data-table" >
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -41,12 +41,14 @@
             </table>
         </div>
 
-    </div>
-        <button type="button"
-                onclick="window.location.href='<?= $link->url("home.index") ?>'"
-                class="btn btn-primary  tlacidlo-prekliknutie" >Hlavná stránka
-        </button>
+        <div class="py-3">
+            <button type="button"
+                    onclick="window.location.href='<?= $link->url("home.index") ?>'"
+                    class="btn btn-primary  tlacidlo-prekliknutie p-3" >Hlavná stránka
+            </button>
+        </div>
     </div>
 </div>
+
 
 <script type="module" src="<?= $link->asset('js/pokrocileHladanie.js') ?>"></script>

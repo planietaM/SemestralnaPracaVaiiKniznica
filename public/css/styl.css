@@ -1,5 +1,5 @@
 .navbar {
-    border-bottom: 1px solid grey;
+    border-bottom: 3px solid grey;
 }
 
 .navbar-brand img {
@@ -7,7 +7,7 @@
 }
 
 .sive-pozadie {
-    background-color: gray;
+    background-color: darkgray;
 }
 
 .hnedy-pozadie {
@@ -63,4 +63,59 @@ body {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+}
+
+
+
+
+/* ===== TABUĽKY - ŠTÝLOVANIE ===== */
+
+table.data-table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+table.data-table th,
+table.data-table td {
+    border: 1px solid black;
+    padding: 12px;
+    text-align: center;
+}
+
+
+table.data-table th {
+    background-color: #D4AF37;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+table.data-table tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+
+table.data-table tr:hover {
+    background-color: #d9d9d9;
+    transition: background-color 0.3s ease;
+}
+
+table.data-table tr:hover td:first-child {
+    color: saddlebrown;
+    font-weight: bold;
+}
+
+table.data-table td:nth-child(4) {
+    font-style: italic;
+    color: #555;
+}
+
+
+.farbaDatumuTabulka {
+    color: red;
+    font-style: italic;
 }

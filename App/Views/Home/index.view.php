@@ -1,7 +1,12 @@
 <?php
-
+/** @var array $books */
+/** @var array $borrowbooks */
+/** @var array $users */
+/** @var array $bookcopies */
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
+
+
 <div class="pozadie-stranky">
     <div class="container-fluid px-5 py-1">
         <div class="text-center">
@@ -41,9 +46,15 @@
 
                 </div>
             </div>
+            <div class="p-3">
+                <p>
+                    Powder halvah sugar plum dessert croissant. Danish cotton candy chocolate cake jujubes sweet roll jelly-o. Jelly-o candy canes cake tart cookie cheesecake dragée. Pie jujubes dragée cupcake wafer lemon drops cookie chocolate tart. Macaroon tiramisu topping carrot cake dragée sweet bonbon wafer bonbon. Sweet jelly brownie powder sesame snaps cookie ice cream. Liquorice tootsie roll chocolate bar gummi bears marshmallow apple pie. Lollipop danish sweet lemon drops donut icing. Tiramisu powder sesame snaps pudding bonbon macaroon. Danish donut dragée dragée gummies. Croissant tart powder gummi bears cake marzipan caramels topping. Carrot cake sweet roll fruitcake topping candy canes wafer.
+                </p>
+            </div>
 
-
-
+            <div class="p-3 podnadpisovy-fond">
+                <h1>Knižničný systém má <?= count($books) ?> kníh</h1>
+            </div>
 
             <img src="<?= $link->asset('images/kniznicaObrazok.jpg') ?>" alt="Knižnica" class="img-fluid mt-4 mb-4">
             <p>

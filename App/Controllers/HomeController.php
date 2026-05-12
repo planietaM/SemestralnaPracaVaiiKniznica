@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\bookcopies;
+use App\Models\books;
+use App\Models\borrowbooks;
+use App\Models\users;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -39,7 +43,17 @@ class HomeController extends BaseController
      */
     public function index(Request $request): Response
     {
-        return $this->html();
+        $books = books::getAll();
+        $borrowbooks = borrowbooks::getAll();
+        $users = users::getAll();
+        $bookcopies = bookcopies::getAll();
+
+        return $this->html([
+            'books' => $books,
+            'borrowbooks' => $borrowbooks,
+            'users' => $users,
+            'bookcopies' => $bookcopies,
+        ]);
     }
 
     /**

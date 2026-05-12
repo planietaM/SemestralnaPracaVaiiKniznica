@@ -15,12 +15,12 @@
             <h1><strong>Vytaj <?= $user->getName()?></strong></h1>
         </div>
 
-        <div class="text-center nadpisovy-fond">
+        <div class="text-center nadpisovy-fond p-3">
             <h2>Požičané knihy</h2>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover" border="2">
+            <table class="data-table" border="2">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -62,12 +62,12 @@
         </div>
 
 
-        <div class="text-center nadpisovy-fond">
+        <div class="text-center nadpisovy-fond p-3">
             <h2>Upomienkove knihy</h2>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover" border="2">
+            <table class="data-table">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -111,7 +111,8 @@
                         <td><?= $borrow->getIdUzivatela() ?></td>
                         <td><?= $nazov ?></td>
                         <td><?= $autor ?></td>
-                        <td><?= $borrow->getDatumPozicania() ?></td>
+                        <td class="farbaDatumuTabulka"><?= $borrow->getDatumPozicania() ?></td>
+
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
