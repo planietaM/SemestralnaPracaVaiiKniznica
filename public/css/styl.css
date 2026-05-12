@@ -119,3 +119,8 @@ table.data-table td:nth-child(4) {
     color: red;
     font-style: italic;
 }
+
+.vyplnaniePoli:focus {
+    outline: 2px solid blue;
+    background: darkgray;
+}

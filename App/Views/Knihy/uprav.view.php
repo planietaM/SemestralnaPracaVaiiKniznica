@@ -19,7 +19,7 @@
                         <div class="alert alert-danger"><?= htmlspecialchars($message) ?></div>
                     <?php endif; ?>
 
-                    <form class="form-signin" method="post" action="<?= $link->url("knihy.uprav") ?>">
+                    <form class="form-signin" method="post" enctype="multipart/form-data" action="<?= $link->url("uprav") ?>">
 
                         <input type="hidden" name="idKnizky" value="<?= htmlspecialchars($kniha->getId()) ?>">
 
@@ -36,9 +36,8 @@
                         </div>
 
                         <div class="form-label-group mb-3">
-                            <label for="fotkaKnizky" class="form-label">URL Fotky</label>
-                            <input name="fotkaKnizky" type="text" id="fotkaKnizky" class="form-control"
-                                   value="<?= htmlspecialchars($kniha->getFotkaKnizky()) ?>">
+                            <label for="fotkaKnizky" class="form-label">Fotkaaaaaa</label>
+                            <input type="file" name="fotkaKnizky" id="fotkaKnizky" required>
                         </div>
 
                         <div class="text-center">

@@ -10,14 +10,12 @@
             <h2>Pokrocile vyhladavanie kniziek</h2>
         </div>
 
-
         <div class="mb-3">
             <input type="text" id="tableSearch" class="form-control w-100" placeholder="🔍 Rýchle hľadanie ...">
         </div>
 
-
         <div class="table-responsive">
-            <table class="data-table" >
+            <table class="data-table">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -26,14 +24,14 @@
                     <th>Fotka</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="booksTbody">
                 <?php foreach ($knihy as $kniha): ?>
                     <tr>
                         <td><?= htmlspecialchars((string)$kniha->getId()) ?></td>
                         <td><?= htmlspecialchars($kniha->getNazovKnizky()) ?></td>
                         <td><?= htmlspecialchars($kniha->getMenoAutora()) ?></td>
                         <td>
-                            <img src="/images/<?= htmlspecialchars($kniha->getFotkaKnizky()) ?>.webp" height="100">
+                            <img src="/images/<?= htmlspecialchars($kniha->getFotkaKnizky()) ?>" height="100">
                         </td>
                     </tr>
                 <?php endforeach ?>
@@ -44,11 +42,10 @@
         <div class="py-3">
             <button type="button"
                     onclick="window.location.href='<?= $link->url("home.index") ?>'"
-                    class="btn btn-primary  tlacidlo-prekliknutie p-3" >Hlavná stránka
+                    class="btn btn-primary tlacidlo-prekliknutie p-3">Hlavná stránka
             </button>
         </div>
     </div>
 </div>
 
-
-<script type="module" src="<?= $link->asset('js/pokrocileHladanie.js') ?>"></script>
+<script src="<?= $link->asset('js/hladanieVTabulkeAjax.js') ?>"></script>

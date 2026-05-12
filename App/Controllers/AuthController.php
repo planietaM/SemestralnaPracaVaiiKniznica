@@ -8,7 +8,7 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
-
+use Framework\Http\Responses\JsonResponse;
 /**
  * Class AuthController
  *
@@ -46,6 +46,46 @@ class AuthController extends BaseController
     public function login(Request $request): Response
     {
         $logged = null;
+
+        if ($request->hasValue('username') && $request->hasValue('password')) {
+            $logged = $this->app->getAuthenticator()->login(
+                $request->value('username'),
+                $request->value('password')
+            );
+
+            if ($logged) {
+                $user = $this->app->getAuthenticator()->getUser();
+                $redirect = ($user->getRola() === 'admin')
+                    ? $this->url("admin.index")
+                    : $this->url("user.index");
+
+                // ak je AJAX, vráť JSON
+                if ($request->isAjax()) {
+                    return new JsonResponse([
+                        'success' => true,
+                        'redirect' => $redirect
+                    ]);
+                }
+
+                return $this->redirect($redirect);
+            }
+        }
+
+        $message = $logged === false ? 'Bad username or password' : null;
+
+        // ak je AJAX a login zlyhal
+        if ($request->isAjax()) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => $message ?? 'Neplatné údaje'
+            ]);
+        }
+
+        return $this->html(compact("message"));
+    }
+    /*public function login(Request $request): Response
+    {
+        $logged = null;
         if ($request->hasValue('submit')) {
             $logged = $this->app->getAuthenticator()->login($request->value('username'), $request->value('password'));
             if ($logged) {
@@ -61,7 +101,7 @@ class AuthController extends BaseController
 
         $message = $logged === false ? 'Bad username or password' : null;
         return $this->html(compact("message"));
-    }
+    }*/
 
     public function register(Request $request): Response
     {

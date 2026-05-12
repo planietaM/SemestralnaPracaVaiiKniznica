@@ -13,19 +13,21 @@ $view->setLayout('auth');
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Prihlas sa</h5>
-                    <div class="text-center text-danger mb-3">
+
+                    <div class="text-center text-danger mb-3" id="loginError">
                         <?= @$message ?>
                     </div>
-                    <form class="form-signin" method="post" action="<?= $link->url("login") ?>">
+
+                    <form id="loginForm" class="form-signin" method="post" action="<?= $link->url("login") ?>">
                         <div class="form-label-group mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input name="username" type="text" id="username" class="form-control" placeholder="Username"
+                            <input name="username" type="text" id="username" class="form-control vyplnaniePoli" placeholder="Username"
                                    required autofocus>
                         </div>
 
                         <div class="form-label-group mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input name="password" type="password" id="password" class="form-control"
+                            <input name="password" type="password" id="password" class="form-control vyplnaniePoli"
                                    placeholder="Password" required>
                         </div>
                         <div class="text-center">
@@ -42,3 +44,5 @@ $view->setLayout('auth');
         </div>
     </div>
 </div>
+
+<script src="<?= $link->asset('js/loginOverenie.js') ?>"></script>

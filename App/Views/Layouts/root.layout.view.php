@@ -32,11 +32,12 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('knihy.index') ?>">Pokrocile Vyhladavanie</a>
+                <a class="nav-link" href="<?= $link->url('knihy.vyhladavanieKniziek') ?>">Pokrocile Vyhladavanie</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?= $link->url('knihy.kopieKniziek') ?>">Vsetky knizky</a>
             </li>
+
             <?php if ($user->isLoggedIn()) { ?>
                 <?php if ($user->getName() == 'admin') { ?>
                     <li class="nav-item">

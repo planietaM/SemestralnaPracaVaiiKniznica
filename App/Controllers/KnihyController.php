@@ -7,6 +7,7 @@ use App\Models\bookcopies;
 use App\Models\borrowbooks;
 use App\Models\users;
 use Framework\Http\Request;
+use Framework\Http\Responses\JsonResponse;
 use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
 use Framework\Core\BaseController;
@@ -14,6 +15,13 @@ use Framework\Core\BaseController;
 class KnihyController extends BaseController
 {
     public function index(Request $request): Response
+    {
+        $knihy = books::getAll();
+        return $this->html([
+            'knihy' => $knihy,
+        ], "index");
+    }
+    public function vyhladavanieKniziek (Request $request): Response
     {
         $knihy = books::getAll();
 
@@ -25,7 +33,31 @@ class KnihyController extends BaseController
 
         return $this->html([
             'knihy' => $knihy,
-        ], "index");
+        ], "vyhladavanieKniziek");
+    }
+    public function search(Request $request): Response
+    {
+        $query = trim((string)($request->get('q') ?? ''));
+        $knihy = books::getAll();
+
+        if ($query !== '') {
+            $q = mb_strtolower($query);
+            $knihy = array_filter($knihy, function ($kniha) use ($q) {
+                return str_contains(mb_strtolower($kniha->getNazovKnizky()), $q)
+                    || str_contains(mb_strtolower($kniha->getMenoAutora()), $q);
+            });
+        }
+
+        $data = array_map(function ($kniha) {
+            return [
+                'id' => $kniha->getId(),
+                'nazov' => $kniha->getNazovKnizky(),
+                'autor' => $kniha->getMenoAutora(),
+                'fotka' => $kniha->getFotkaKnizky(),
+            ];
+        }, $knihy);
+
+        return new JsonResponse(array_values($data));
     }
 
     public function kopieKniziek(Request $request): Response
@@ -61,7 +93,11 @@ class KnihyController extends BaseController
         }
 
 
+
         if (!is_null($pozicanie)) {
+            $staryNazovFotky = $pozicanie->getFotkaKnizky();
+            $staraCestaSuboru = __DIR__ . '/../../public/images/' . $staryNazovFotky;
+            unlink($staraCestaSuboru);
             $pozicanie->delete();
         }
 
@@ -77,33 +113,38 @@ class KnihyController extends BaseController
 
             $nazovKnizky = $request->post('nazovKnizky');
             $menoAutora = $request->post('menoAutora');
-            $fotkaKnizky = $request->post('fotkaKnizky');
             $pocetKopii = $request->post('pocetKopii');
+            $file = $request->file('fotkaKnizky');
 
+            if (!$file || !$file->isOk()) {
+                $message = "Chyba pri nahrávaní fotky";
+                return $this->html([
+                    'message' => $message
+                ], 'pridajKnihu');
+            }
+            $nazovFotky = $file->getName();
 
-            // Skontroluj, či súbor existuje
-            $cestaSuboru = __DIR__ . '/../../public/images/' . $fotkaKnizky . '.webp';
+            $cestaSuboru = __DIR__ . '/../../public/images/' . $nazovFotky ;
 
-
-
-            if (empty($nazovKnizky) || empty($menoAutora) || empty($fotkaKnizky) || empty($pocetKopii)) {
+            if (empty($nazovKnizky) || empty($menoAutora) || empty($pocetKopii)) {
                 $message = "Všetky polia sú povinné!";
             } elseif (strlen($nazovKnizky) < 5) {
                 $message = "Je kratky nazov knizky";
             } elseif ($pocetKopii <= 0) {
                 $message = "zadal si zly pocet Knihh";
-            }elseif (!file_exists($cestaSuboru)){
-                $message = "Neplatný názov fotky";
-            }
-            else {
+            }elseif (file_exists($cestaSuboru)){
+                $message = "Tato fotka sa uz pouziva";
+            } else {
                 try {
                     // Musí sa volať presne ako class v modeli: users
                     $book = new \App\Models\books();
 
                     $book->setNazovKnizky($nazovKnizky);
                     $book->setMenoAutora($menoAutora);
-                    $book->setFotkaKnizky($fotkaKnizky);
+                    $book->setFotkaKnizky($nazovFotky);
                     $book->save();
+
+                    $file->store($cestaSuboru);
 
                     for($i = 0 ; $i < $pocetKopii ; $i++){
                         $bookcopies = new \App\Models\bookcopies();
@@ -116,11 +157,7 @@ class KnihyController extends BaseController
                     // Ak napr. email už existuje a DB vyhodí chybu
                     $message = "Chyba pri registrácii: " . $e->getMessage();
                 }
-
-
             }
-
-
         }
         return $this->html([
             'message' => $message
@@ -147,19 +184,28 @@ class KnihyController extends BaseController
 
         // Ak je POST požiadavka a existuje aspoň jedno pole na úpravu
         if ($request->isPost()) {
+
             $nazovKnizky = trim($request->post('nazovKnizky') ?? '');
             $menoAutora = trim($request->post('menoAutora') ?? '');
-            $fotkaKnizky = trim($request->post('fotkaKnizky') ?? '');
+            $file = $request->file('fotkaKnizky');
 
-            $cestaSuboru = __DIR__ . '/../../public/images/' . $fotkaKnizky . '.webp';
+            $nazovFotky = null;
+            if ($file && $file->isOk()) {
+                $nazovFotky = $file->getName();
+                $cestaSuboru = __DIR__ . '/../../public/images/' . $nazovFotky;
+            } elseif ($file) {
+                $message = "Chyba pri nahrávaní fotky";
+            }
 
-            if (empty($nazovKnizky) && empty($menoAutora) && empty($fotkaKnizky)) {
+
+            if (empty($nazovKnizky) && empty($menoAutora) && empty($nazovFotky)) {
                 $message = "Musíš zmeniť aspoň jedno pole!";
             } elseif ($nazovKnizky && strlen($nazovKnizky) < 5) {
                 $message = "Je príliš krátky názov knihy";
-            } elseif (!file_exists($cestaSuboru)){
-                $message = "Neplatný názov fotky";
-            }else {
+            } elseif (file_exists($cestaSuboru)){
+                $message = "Tato fotka sa pouziva";
+            }
+            if($message == null) {
                 try {
                     if (!empty($nazovKnizky)) {
                         $kniha->setNazovKnizky($nazovKnizky);
@@ -167,8 +213,12 @@ class KnihyController extends BaseController
                     if (!empty($menoAutora)) {
                         $kniha->setMenoAutora($menoAutora);
                     }
-                    if (!empty($fotkaKnizky)) {
-                        $kniha->setFotkaKnizky($fotkaKnizky);
+                    if (!empty($nazovFotky)) {
+                        $staryNazovFotky = $kniha->getFotkaKnizky();
+                        $staraCestaSuboru = __DIR__ . '/../../public/images/' . $staryNazovFotky;
+                        unlink($staraCestaSuboru);
+                        $file->store($cestaSuboru);
+                        $kniha->setFotkaKnizky($nazovFotky);
                     }
                     $kniha->save();
 

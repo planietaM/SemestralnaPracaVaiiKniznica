@@ -16,7 +16,7 @@
             </div>
 
 
-            <form class="form-signin" method="post" action="<?= $link->url("pridajKnihu") ?>">
+            <form class="form-signin" method="post"  enctype="multipart/form-data" action="<?= $link->url("pridajKnihu") ?>">
 
 
                 <div class="form-label-group mb-3">
@@ -33,17 +33,20 @@
                 </div>
 
 
-                <div class="form-label-group mb-3">
-                    <label for="fotkaKnizky" class="form-label">Fotka</label>
-                    <input name="fotkaKnizky" type="text" id="fotkaKnizky" class="form-control"
-                           placeholder="fotkaKnizky" required>
-                </div>
 
                 <div class="form-label-group mb-3">
                     <label for="pocetKopii" class="form-label">Pocet kopii</label>
                     <input name="pocetKopii" type="number" id="pocetKopii" class="form-control"
                            placeholder="pocetKopii" required>
                 </div>
+
+
+                <div class="form-label-group mb-3">
+                    <label for="fotkaKnizky" class="form-label">Fotka</label>
+                    <input type="file" name="fotkaKnizky" id="fotkaKnizky" required>
+                </div>
+
+
 
 
                 <div class="text-center">
