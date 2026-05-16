@@ -43,47 +43,8 @@ class AuthController extends BaseController
      *                  an error message on failure.
      * @throws Exception If the parameter for the URL generator is invalid throws an exception.
      */
+
     public function login(Request $request): Response
-    {
-        $logged = null;
-
-        if ($request->hasValue('username') && $request->hasValue('password')) {
-            $logged = $this->app->getAuthenticator()->login(
-                $request->value('username'),
-                $request->value('password')
-            );
-
-            if ($logged) {
-                $user = $this->app->getAuthenticator()->getUser();
-                $redirect = ($user->getRola() === 'admin')
-                    ? $this->url("admin.index")
-                    : $this->url("user.index");
-
-                // ak je AJAX, vráť JSON
-                if ($request->isAjax()) {
-                    return new JsonResponse([
-                        'success' => true,
-                        'redirect' => $redirect
-                    ]);
-                }
-
-                return $this->redirect($redirect);
-            }
-        }
-
-        $message = $logged === false ? 'Bad username or password' : null;
-
-        // ak je AJAX a login zlyhal
-        if ($request->isAjax()) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => $message ?? 'Neplatné údaje'
-            ]);
-        }
-
-        return $this->html(compact("message"));
-    }
-    /*public function login(Request $request): Response
     {
         $logged = null;
         if ($request->hasValue('submit')) {
@@ -101,8 +62,9 @@ class AuthController extends BaseController
 
         $message = $logged === false ? 'Bad username or password' : null;
         return $this->html(compact("message"));
-    }*/
+    }
 
+    /*
     public function register(Request $request): Response
     {
         $message = null;
@@ -185,8 +147,94 @@ class AuthController extends BaseController
         return $this->html([
             'message' => $message
         ], 'register');
-    }
+    }*/
 
+
+    public function register(Request $request): Response
+    {
+        $message = null;
+
+        if ($request->isPost()) {
+
+            $meno = $request->post('meno') ?? '';
+            $email = $request->post('email') ?? '';
+            $heslo = $request->post('heslo') ?? '';
+            $hesloOverenie = $request->post('hesloOverenie') ?? '';
+
+            $vsetciPouzivatelia = \App\Models\users::getAll();
+            $emailUzExistuje = false;
+            $menoUzExistuje = false;
+            $jeProblemPriDatach = false;
+
+            if (empty($meno) || empty($email) || empty($heslo)) {
+                $message = "Všetky polia sú povinné!";
+                $jeProblemPriDatach = true;
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = "Neplatný formát e-mailu!";
+                $jeProblemPriDatach = true;
+            }
+
+            foreach ($vsetciPouzivatelia as $existujuciUser) {
+                if ($existujuciUser->getEmail() === $email) {
+                    $emailUzExistuje = true;
+                }
+                if ($existujuciUser->getMeno() === $meno) {
+                    $menoUzExistuje = true;
+                }
+            }
+
+            // preferuj email/meno pred heslami
+            if ($emailUzExistuje) {
+                $message = "Tento e-mail je už zaregistrovaný!";
+                $jeProblemPriDatach = true;
+            } elseif ($menoUzExistuje) {
+                $message = "Toto meno je už zaregistrované!";
+                $jeProblemPriDatach = true;
+            } elseif (strlen($heslo) < 6) {
+                $message = "Heslo musí mať aspoň 6 znakov!";
+                $jeProblemPriDatach = true;
+            } elseif ($heslo !== $hesloOverenie) {
+                $message = "Heslá sa nezhodujú!";
+                $jeProblemPriDatach = true;
+            }
+
+            if ($jeProblemPriDatach == false) {
+                try {
+                    $user = new \App\Models\users();
+                    $user->setMeno($meno);
+                    $user->setEmail($email);
+                    $user->setHeslo(password_hash($heslo, PASSWORD_DEFAULT));
+                    $user->setRolaPouzivatela('user');
+                    $user->save();
+
+
+                    if ($request->isAjax()) {
+                        return new JsonResponse([
+                            'success' => true,
+                            'redirect' => $this->url("auth.login")
+                        ]);
+                    }
+
+                    return $this->redirect($this->url("auth.login"));
+
+                } catch (\Exception $e) {
+                    $message = "Chyba pri registrácii: " . $e->getMessage();
+                }
+            }
+
+
+            if ($request->isAjax()) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => $message ?? 'Registrácia zlyhala'
+                ]);
+            }
+        }
+
+        return $this->html([
+            'message' => $message
+        ], 'register');
+    }
     /**
      * Logs out the current user.
      *

@@ -78,13 +78,11 @@ class KnihyController extends BaseController
         $borrowbooks = borrowbooks::getAll();
         $bookcopies = bookcopies::getAll();
 
-
         foreach ($borrowbooks as $borrow){
             if($borrow->getIdOriginaluKnizky() == $idKnihy){
                 $borrow->delete();
             }
         }
-
 
         foreach ($bookcopies as $book){
             if($book->getIdOriginalKopie() == $idKnihy){
@@ -92,11 +90,9 @@ class KnihyController extends BaseController
             }
         }
 
-
-
         if (!is_null($pozicanie)) {
             $staryNazovFotky = $pozicanie->getFotkaKnizky();
-            $staraCestaSuboru = __DIR__ . '/../../public/images/' . $staryNazovFotky;
+            $staraCestaSuboru = __DIR__ . '/../../public/images/'.$staryNazovFotky;
             unlink($staraCestaSuboru);
             $pozicanie->delete();
         }
@@ -123,25 +119,28 @@ class KnihyController extends BaseController
                 ], 'pridajKnihu');
             }
             $nazovFotky = $file->getName();
-
-            $cestaSuboru = __DIR__ . '/../../public/images/' . $nazovFotky ;
+            $book = new \App\Models\books();
+            $book->save();
+            $cestaSuboru = __DIR__ . '/../../public/images/'.$book->getId().$nazovFotky;
 
             if (empty($nazovKnizky) || empty($menoAutora) || empty($pocetKopii)) {
                 $message = "Všetky polia sú povinné!";
+                $book->delete();
             } elseif (strlen($nazovKnizky) < 5) {
                 $message = "Je kratky nazov knizky";
+                $book->delete();
             } elseif ($pocetKopii <= 0) {
                 $message = "zadal si zly pocet Knihh";
+                $book->delete();
             }elseif (file_exists($cestaSuboru)){
                 $message = "Tato fotka sa uz pouziva";
+                $book->delete();
             } else {
                 try {
                     // Musí sa volať presne ako class v modeli: users
-                    $book = new \App\Models\books();
-
                     $book->setNazovKnizky($nazovKnizky);
                     $book->setMenoAutora($menoAutora);
-                    $book->setFotkaKnizky($nazovFotky);
+                    $book->setFotkaKnizky($book->getId().$nazovFotky);
                     $book->save();
 
                     $file->store($cestaSuboru);
@@ -156,6 +155,7 @@ class KnihyController extends BaseController
                 } catch (\Exception $e) {
                     // Ak napr. email už existuje a DB vyhodí chybu
                     $message = "Chyba pri registrácii: " . $e->getMessage();
+                    $book->delete();
                 }
             }
         }
@@ -192,7 +192,7 @@ class KnihyController extends BaseController
             $nazovFotky = null;
             if ($file && $file->isOk()) {
                 $nazovFotky = $file->getName();
-                $cestaSuboru = __DIR__ . '/../../public/images/' . $nazovFotky;
+                $cestaSuboru = __DIR__ . '/../../public/images/'.$idKnihy.$nazovFotky;
             } elseif ($file) {
                 $message = "Chyba pri nahrávaní fotky";
             }
@@ -215,10 +215,12 @@ class KnihyController extends BaseController
                     }
                     if (!empty($nazovFotky)) {
                         $staryNazovFotky = $kniha->getFotkaKnizky();
-                        $staraCestaSuboru = __DIR__ . '/../../public/images/' . $staryNazovFotky;
+                        $staraCestaSuboru = __DIR__ . '/../../public/images/'.$staryNazovFotky;
+
                         unlink($staraCestaSuboru);
+
                         $file->store($cestaSuboru);
-                        $kniha->setFotkaKnizky($nazovFotky);
+                        $kniha->setFotkaKnizky($idKnihy.$nazovFotky);
                     }
                     $kniha->save();
 

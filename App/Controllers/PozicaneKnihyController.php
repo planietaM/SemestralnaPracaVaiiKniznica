@@ -97,7 +97,8 @@ class PozicaneKnihyController extends BaseController
         }
 
         return $this->html([
-            'message' => $message
+            'message' => $message,
+            'users' => $vsetciPouzivatelia
         ], 'pozicaj');
     }
 

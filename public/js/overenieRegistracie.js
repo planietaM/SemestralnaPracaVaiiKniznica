@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("loginForm");
-    const errorBox = document.getElementById("loginError");
+    const form = document.getElementById("registraciaOverenieForm");
+    const errorBox = document.getElementById("registraciaOverenieError");
 
     if (!form) return;
 
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.success) {
             window.location.href = data.redirect;
         } else {
-            errorBox.textContent = data.message || "Login failed";
+            errorBox.textContent = data.message || "Registrácia zlyhala";
         }
     });
 });

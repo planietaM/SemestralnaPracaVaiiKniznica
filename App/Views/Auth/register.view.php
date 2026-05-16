@@ -14,12 +14,12 @@ $view->setLayout('auth');
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Zaregistruj Sa</h5>
-                    <div class="text-center text-danger mb-3">
+                    <div class="text-center text-danger mb-3" id= "registraciaOverenieError">
                         <?= @$message ?>
                     </div>
 
 
-                    <form class="form-signin" method="post" action="<?= $link->url("register") ?>">
+                    <form id= "registraciaOverenieForm" class="form-signin" method="post" action="<?= $link->url("register") ?>">
 
 
                         <div class="form-label-group mb-3">
@@ -70,3 +70,5 @@ $view->setLayout('auth');
         </div>
     </div>
 </div>
+
+<script src="<?= $link->asset('js/overenieRegistracie.js') ?>"></script>

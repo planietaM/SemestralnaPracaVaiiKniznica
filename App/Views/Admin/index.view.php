@@ -46,7 +46,7 @@
                         <td>
                             <form method="POST" action="<?= $link->url("knihy.vymaz") ?>">
                                 <input type="hidden" name="idKnizky" value="<?= $book->getId() ?>">
-                                <button type="submit" class="btn btn-danger tlacidlo-vymazania">Vymazať</button>
+                                <button type="submit" class="btn btn-danger tlacidlo-vymazania" onclick="return confirm('Naozaj chces vymazat tuto knihu')" >Vymazať</button>
                             </form>
                         </td>
                         <td>
@@ -232,7 +232,7 @@
                         <td>
                             <form method="POST" action="<?= $link->url("pozicaneKnihy.vymaz") ?>">
                                 <input type="hidden" name="idPozicania" value="<?= $borrow->getId() ?>">
-                                <button type="submit" class="btn btn-danger tlacidlo-vymazania">Vymazať</button>
+                                <button type="submit" class="btn btn-danger tlacidlo-vymazania" onclick="return confirm('Naozaj chces vymazat tuto knihu')">Vymazať</button>
                             </form>
                         </td>
                         <td>

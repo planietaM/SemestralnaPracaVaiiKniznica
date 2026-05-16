@@ -50,7 +50,7 @@
                 <?php } ?>
             <?php } else { ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= $link->url('home.index') ?>">Domovska stranka</a>
+                    <a class="nav-link" href="<?= $link->url('home.index') ?>">Hlavna stranka</a>
                 </li>
             <?php } ?>
 
