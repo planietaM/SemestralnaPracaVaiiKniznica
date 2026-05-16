@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("registraciaOverenieForm");
     const errorBox = document.getElementById("registraciaOverenieError");
 
-    if (!form) return;
+    if (form == null) {
+        return;
+    }
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();

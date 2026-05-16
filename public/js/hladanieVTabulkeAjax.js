@@ -3,14 +3,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const tbody = document.getElementById("booksTbody");
     let timer;
 
-    if (!input || !tbody) return;
+    if (input == null || tbody == null) {
+        return;
+    }
 
     input.addEventListener("keyup", () => {
         clearTimeout(timer);
         timer = setTimeout(async () => {
-            const value = input.value.trim();
-            const response = await fetch(`/?c=Knihy&a=search&q=${encodeURIComponent(value)}`);
-            const data = await response.json();
+            const zadavaneVeci = input.value.trim();
+            const VratenePoleDat = await fetch(`/?c=Knihy&a=search&hladanyText=${encodeURIComponent(zadavaneVeci)}`);
+            const data = await VratenePoleDat.json();
 
             console.log(data);
 

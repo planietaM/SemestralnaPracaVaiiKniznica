@@ -25,7 +25,7 @@
                             </p>
                         </div>
                         <button type="button"
-                                onclick="window.location.href='<?= $link->url("knihy.index") ?>'"
+                                onclick="window.location.href='<?= $link->url("knihy.vyhladavanieKniziek") ?>'"
                                 class="btn btn-primary  tlacidlo-prekliknutie">Vyhladavanie
                         </button>
                     </div>

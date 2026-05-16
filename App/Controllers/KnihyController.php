@@ -37,14 +37,14 @@ class KnihyController extends BaseController
     }
     public function search(Request $request): Response
     {
-        $query = trim((string)($request->get('q') ?? ''));
+        $textZInputu = trim((string)($request->get('hladanyText') ?? ''));
         $knihy = books::getAll();
 
-        if ($query !== '') {
-            $q = mb_strtolower($query);
-            $knihy = array_filter($knihy, function ($kniha) use ($q) {
-                return str_contains(mb_strtolower($kniha->getNazovKnizky()), $q)
-                    || str_contains(mb_strtolower($kniha->getMenoAutora()), $q);
+        if ($textZInputu !== '') {
+            $hladanyText = mb_strtolower($textZInputu);
+            $knihy = array_filter($knihy, function ($kniha) use ($hladanyText) {
+                return str_contains(mb_strtolower($kniha->getNazovKnizky()), $hladanyText)
+                    || str_contains(mb_strtolower($kniha->getMenoAutora()), $hladanyText);
             });
         }
 
